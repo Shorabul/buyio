@@ -1,11 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Link from "next/link";
+import useAuth from "@/hooks/useAuth";
 
 export default function UserDropdown() {
     const [open, setOpen] = useState(false);
-    const user = false;
+    const { user, logOut } = useAuth();
+    const handleLogOut = () => {
+        logOut();
+    }
     return (
         <div className="relative">
             {/* Dropdown Toggle */}
@@ -36,7 +40,7 @@ export default function UserDropdown() {
                         Manage Products
                     </Link>
                     <button
-                        onClick={() => alert("Logout logic here")}
+                        onClick={handleLogOut}
                         className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
                     >
                         Logout
