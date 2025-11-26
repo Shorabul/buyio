@@ -1,0 +1,34 @@
+{
+    "categories": [
+        {
+            "name": "Men",
+            "subCategories": [
+                "T-Shirts",
+                "Shirts",
+                "Pants",
+                "Jeans",
+                "Shoes"
+            ]
+        },
+        {
+            "name": "Women",
+            "subCategories": [
+                "Dresses",
+                "Tops",
+                "Skirts",
+                "Jeans",
+                "Shoes"
+            ]
+        },
+        {
+            "name": "Kids",
+            "subCategories": [
+                "Baby",
+                "Boys",
+                "Girls",
+                "T-Shirts",
+                "Shoes"
+            ]
+        }
+    ]
+}

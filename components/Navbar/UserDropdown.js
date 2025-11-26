@@ -28,7 +28,7 @@ export default function UserDropdown() {
                         <p className="text-sm text-gray-500">{user?.email}</p>
                     </div>
                     <Link
-                        href="/products/add"
+                        href="/add-product"
                         className="block px-4 py-2 hover:bg-gray-100"
                     >
                         Add Product

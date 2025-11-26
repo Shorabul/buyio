@@ -14,7 +14,7 @@ export async function POST(req) {
         }
 
         const client = await clientPromise;
-        const db = client.db("buyio-db");
+        const db = client.db("buyio-db"); // database name
         const usersCollection = db.collection("users");
 
         // Check if user already exists
@@ -52,7 +52,7 @@ export async function POST(req) {
 export async function GET() {
     try {
         const client = await clientPromise;
-        const db = client.db("buyio-db"); // Make sure DB name is consistent
+        const db = client.db("buyio-db"); // database name
         const usersCollection = db.collection("users");
 
         const users = await usersCollection.find({}).toArray();
