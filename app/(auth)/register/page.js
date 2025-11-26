@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { CircleAlert, Mail, Lock, CheckCircle2, User, CloudUpload, ChevronRight } from "lucide-react";
 import SocialLogin from "@/components/auth/SocialLogin";
@@ -10,41 +11,93 @@ import { useRouter } from "next/navigation";
 export default function RegisterForm() {
     const { registerUser, updateUserProfile } = useAuth();
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
+
     const {
         register,
         handleSubmit,
         formState: { errors, touchedFields },
+        setError,
     } = useForm({ mode: "onChange" });
 
-    const onSubmit = async (data) => {
-        // console.log(data);
+    const getFirebaseErrorMessage = (error) => {
+        switch (error.code) {
+            case "auth/email-already-in-use":
+                return "This email is already registered.";
+            case "auth/invalid-email":
+                return "The email address is not valid.";
+            case "auth/weak-password":
+                return "Your password is too weak.";
+            case "auth/user-disabled":
+                return "This user account has been disabled.";
+            case "auth/user-not-found":
+                return "No user found with this email.";
+            case "auth/wrong-password":
+                return "Incorrect password.";
+            default:
+                return error.message || "An unexpected error occurred.";
+        }
+    };
+
+    const onSubmit = (data) => {
+        setLoading(true);
         const profileImage = data.photo[0];
 
-        registerUser(data.email, data.password).then(() => {
-            const formData = new FormData();
-            formData.append('image', profileImage);
-            const image_API_URL = `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_HOST_API_KEY}`
-            axios.post(image_API_URL, formData)
-                .then(res => {
-                    const photo_URL = res.data.data.url;
-                    const userProfile = {
-                        displayName: data.name,
-                        photoURL: photo_URL,
-                    }
+        registerUser(data.email, data.password)
+            .then(() => {
+                // Clear previous errors
+                setError("email", {});
+                setError("password", {});
 
-                    updateUserProfile(userProfile)
-                        .then(() => {
-                            console.log('User Profile updated');
-                            router.push(router.query?.redirect || "/");
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        })
+                // Upload image to imgbb
+                const formData = new FormData();
+                formData.append("image", profileImage);
+                const image_API_URL = `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_HOST_API_KEY}`;
 
-                })
-        }).catch(error => {
-            console.log(error);
-        })
+                return axios.post(image_API_URL, formData);
+            })
+            .then((imgRes) => {
+                const photo_URL = imgRes.data.data.url;
+
+                // Save user to backend
+                return axios.post("/api/users", {
+                    name: data.name,
+                    email: data.email,
+                    image: photo_URL,
+                    createdAt: new Date(),
+                }).then(() => photo_URL); // Pass photo_URL to next then
+            })
+            .then((photo_URL) => {
+                // Update Firebase profile
+                return updateUserProfile({
+                    displayName: data.name,
+                    photoURL: photo_URL,
+                });
+            })
+            .then(() => {
+                router.push(router.query?.redirect || "/");
+            })
+            .catch((error) => {
+                console.log(error);
+
+                // Handle Firebase errors under the correct field
+                if (error.code && (error.code.includes("auth/email") || error.code.includes("auth/invalid"))) {
+                    setError("email", {
+                        type: "firebase",
+                        message: getFirebaseErrorMessage(error),
+                    });
+                } else if (error.code === "auth/weak-password") {
+                    setError("password", {
+                        type: "firebase",
+                        message: getFirebaseErrorMessage(error),
+                    });
+                } else {
+                    alert(error.message || "Something went wrong!");
+                }
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     };
 
     return (

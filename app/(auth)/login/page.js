@@ -6,23 +6,72 @@ import SocialLogin from "@/components/auth/SocialLogin";
 import Link from "next/link";
 import useAuth from "@/hooks/useAuth";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
     const { user, logIn } = useAuth();
-
+    const router = useRouter();
+    const [loading, setLoading] = useState(false);
     const {
         register,
         handleSubmit,
         formState: { errors, touchedFields },
+        setError,
     } = useForm({ mode: "onChange" });
 
-    const onSubmit = async (data) => {
-        try {
-            const result = await logIn(data.email, data.password);
-            alert(`Welcome ${user?.displayName}`);
-        } catch (err) {
-            console.error(err.message);
+    const getFirebaseLoginErrorMessage = (error) => {
+        switch (error.code) {
+            case "auth/invalid-email":
+                return "The email address is not valid.";
+            case "auth/user-disabled":
+                return "This user account has been disabled.";
+            case "auth/user-not-found":
+                return "No account found with this email.";
+            case "auth/wrong-password":
+                return "Incorrect password.";
+            case "auth/too-many-requests":
+                return "Too many login attempts. Please try again later.";
+            case "auth/network-request-failed":
+                return "Network error. Please check your internet connection.";
+            case "auth/invalid-credential":
+                return "Invalid credentials. Please log in again.";
+            case "auth/popup-closed-by-user":
+                return "Login was canceled. Please try again.";
+            case "auth/cancelled-popup-request":
+                return "Login request was canceled. Try again.";
+            case "auth/popup-blocked":
+                return "Popup blocked. Please allow popups and try again.";
+            default:
+                return error.message || "An unexpected error occurred.";
         }
+    };
+
+    const onSubmit = (data) => {
+        setLoading(true);
+
+        logIn(data.email, data.password)
+            .then(() => {
+                // alert(`Welcome ${user?.displayName}`);
+                router.push(router.query?.redirect || "/");
+            })
+            .catch((error) => {
+                console.error(error);
+
+                if (error.code && (error.code.includes("email") || error.code.includes("invalid"))) {
+                    setError("email", {
+                        type: "firebase",
+                        message: getFirebaseLoginErrorMessage(error),
+                    });
+                } else if (error.code === "auth/wrong-password") {
+                    setError("password", {
+                        type: "firebase",
+                        message: getFirebaseLoginErrorMessage(error),
+                    });
+                } else {
+                    alert(getFirebaseLoginErrorMessage(error));
+                }
+            })
+            .finally(() => setLoading(false));
     };
 
     return (
@@ -115,14 +164,16 @@ export default function LoginForm() {
                     )}
                 </div>
 
-
                 {/* Submit */}
                 <button
                     type="submit"
-                    className="w-full bg-rose-500 text-white py-2 rounded-lg hover:bg-red-500 transition"
+                    disabled={loading}
+                    className={`w-full bg-rose-500 text-white py-2 rounded-lg transition flex justify-center items-center gap-2
+        ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-red-500"}`}
                 >
                     Login
                 </button>
+
                 <SocialLogin></SocialLogin>
             </form>
         </div>
