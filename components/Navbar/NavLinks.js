@@ -16,7 +16,7 @@ export default function NavLinks() {
             <Link href="/" className={linkClass("/")}>
                 Home
             </Link>
-            <Link href="/products" className={linkClass("/products")}>
+            <Link href="/all-products" className={linkClass("/products")}>
                 Products
             </Link>
             <Link href="/about" className={linkClass("/about")}>
