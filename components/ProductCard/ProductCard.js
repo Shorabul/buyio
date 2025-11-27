@@ -1,23 +1,32 @@
 "use client";
-import React from 'react';
+import React from "react";
+import { useRouter } from "next/navigation";
 
 export default function ProductCard({ product }) {
+    const router = useRouter();
+
+    const handleViewDetails = () => {
+        router.push(`/product/${product._id}`);
+    };
+
     return (
-        <div className="border rounded p-4 shadow">
+        <div className="border rounded-lg p-4 shadow hover:shadow-lg transition">
             <img
                 src={product.image}
                 alt={product.title}
-                width={400}
-                height={300}
-                className="w-full h-48 object-cover rounded"
+                className="w-full h-48 object-cover mb-4 rounded"
             />
-            <h2 className="text-lg font-semibold mt-2">{product.title}</h2>
-            <p className="text-sm text-gray-600">{product.description}</p>
-            <p className="font-bold mt-2">${product.price}</p>
-            <p className="text-xs text-gray-500">Category: {product.category}</p>
-            <p className="text-xs text-gray-500">Stock: {product.stock}</p>
-            <p className="text-xs text-gray-500">Seller: {product.seller}</p>
+            <h2 className="text-lg font-semibold">{product.title}</h2>
+            <p className="text-gray-600">{product.category}</p>
+            <p className="text-gray-900 font-bold">${product.price}</p>
+            <button
+                onClick={handleViewDetails}
+                className="mt-3 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition"
+            >
+                View Details
+            </button>
         </div>
     );
-};
+}
+
 

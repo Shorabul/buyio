@@ -3,8 +3,10 @@
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import useAuth from "@/hooks/useAuth";
 
 export default function AddProductForm() {
+    const { user } = useAuth();
     const {
         register,
         handleSubmit,
@@ -45,7 +47,8 @@ export default function AddProductForm() {
                 subCategory: formData.subCategory,
                 stock: parseInt(formData.stock),
                 sku: formData.sku,
-                seller: formData.seller,
+                seller: user?.displayName,
+                sellerEmail: user?.email,
                 image: imageUrl,
                 createdAt: new Date(),
             };
@@ -71,7 +74,8 @@ export default function AddProductForm() {
             onSubmit={handleSubmit(onSubmit)}
             className="space-y-4 max-w-2xl mx-auto p-6 bg-white rounded shadow"
         >
-            <h2 className="text-xl font-semibold mb-4">Add New Product</h2>
+            <h1>{user?.displayName}</h1>
+            <h3>{user?.email}</h3>
 
             <input {...register("title", { required: true })} placeholder="Title" className="w-full border p-2 rounded" />
             <textarea {...register("description", { required: true })} placeholder="Description" className="w-full border p-2 rounded" />
@@ -106,8 +110,9 @@ export default function AddProductForm() {
             )}
 
             <input {...register("stock", { required: true })} type="number" placeholder="Stock" className="w-full border p-2 rounded" />
+
             <input {...register("sku", { required: true })} placeholder="SKU" className="w-full border p-2 rounded" />
-            <input {...register("seller", { required: true })} placeholder="Seller" className="w-full border p-2 rounded" />
+
             <input {...register("image", { required: true })} type="file" accept="image/*" className="w-full border p-2 rounded" />
 
             <button type="submit" disabled={loading} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">

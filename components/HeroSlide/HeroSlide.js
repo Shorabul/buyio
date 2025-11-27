@@ -1,30 +1,31 @@
 "use client";
 
-import { motion } from "framer-motion";
+import CategorySlideshow from "./CategorySlideshow";
 
-export default function HeroSlide() {
+export default function HeroSection() {
     return (
-        <section className="min-h-[80vh] flex items-center justify-center bg-gradient-to-r from-rose-100 to-orange-100 px-4">
-            <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="text-center max-w-2xl bg-white/70 backdrop-blur-sm p-6 rounded-lg shadow-lg"
-            >
-                <h1 className="text-4xl md:text-5xl font-bold text-rose-600 mb-4">
-                    Healthy Food Available to Everyone
+        <section className="relative w-full h-[600px] bg-gray-100">
+            {/* Hero Background */}
+            <img
+                src="https://coderthemes.com/cartzilla-laravel/assets/img/home/fashion/v2/hero/image.png"
+                alt="Fall Collection"
+                className="absolute inset-0 w-full h-full object-cover"
+            />
+
+            {/* Overlay */}
+            <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-center text-white px-4">
+                <h1 className="text-4xl md:text-5xl font-bold mb-4">
+                    New Fall Season 2025
                 </h1>
-                <p className="text-lg md:text-xl text-gray-700 mb-6">
-                    Free shipping on orders over $50 — shop now!
+                <p className="text-lg md:text-xl mb-8">
+                    The new stylish collection — Shop now
                 </p>
-                <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="bg-rose-500 hover:bg-rose-600 text-white font-semibold py-3 px-6 rounded shadow"
-                >
-                    Shop Now
-                </motion.button>
-            </motion.div>
+
+                {/* Category Slideshow inside hero */}
+                <div className="w-full max-w-md">
+                    <CategorySlideshow />
+                </div>
+            </div>
         </section>
     );
 }

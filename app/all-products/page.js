@@ -1,17 +1,16 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ProductCard from "@/components/ProductCard/ProductCard";
-// import Image from "next/image";
 
 export default function ProductsPage() {
     const [products, setProducts] = useState([]);
-
+    // console.log(products);
     useEffect(() => {
         axios.get("/api/products").then((res) => {
             setProducts(res.data.products);
         });
+
     }, []);
 
     return (
