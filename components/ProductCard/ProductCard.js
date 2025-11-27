@@ -21,7 +21,7 @@ export default function ProductCard({ product }) {
             <p className="text-gray-900 font-bold">${product.price}</p>
             <button
                 onClick={handleViewDetails}
-                className="mt-3 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition"
+                className="mt-3 w-full bg-rose-500 text-white py-2 rounded hover:bg-red-600 transition"
             >
                 View Details
             </button>

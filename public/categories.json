@@ -1,33 +1,63 @@
 {
     "categories": [
         {
-            "name": "Men",
+            "name": "Computers",
             "subCategories": [
-                "T-Shirts",
-                "Shirts",
-                "Pants",
-                "Jeans",
-                "Shoes"
+                "Laptops",
+                "Desktops",
+                "Monitors",
+                "Keyboards",
+                "Mice",
+                "Printers",
+                "Storage Devices"
             ]
         },
         {
-            "name": "Women",
+            "name": "Mobile",
             "subCategories": [
-                "Dresses",
-                "Tops",
-                "Skirts",
-                "Jeans",
-                "Shoes"
+                "Smartphones",
+                "Tablets",
+                "Smartwatches",
+                "Chargers",
+                "Cases",
+                "Earbuds",
+                "Power Banks"
             ]
         },
         {
-            "name": "Kids",
+            "name": "Home Electronics",
             "subCategories": [
-                "Baby",
-                "Boys",
-                "Girls",
-                "T-Shirts",
-                "Shoes"
+                "Televisions",
+                "Speakers",
+                "Headphones",
+                "Cameras",
+                "Gaming Consoles",
+                "Projectors",
+                "Streaming Devices"
+            ]
+        },
+        {
+            "name": "Appliances",
+            "subCategories": [
+                "Refrigerators",
+                "Microwaves",
+                "Washing Machines",
+                "Air Conditioners",
+                "Vacuum Cleaners",
+                "Coffee Makers",
+                "Dishwashers"
+            ]
+        },
+        {
+            "name": "Networking",
+            "subCategories": [
+                "Routers",
+                "Modems",
+                "Wi-Fi Extenders",
+                "Switches",
+                "Network Cables",
+                "Access Points",
+                "NAS Devices"
             ]
         }
     ]
